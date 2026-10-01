@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1268d9">
+<title>BharathBridge AI – Version 1.6</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef5fb;color:#15324b;font-family:Arial,Helvetica,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:600px;min-height:100vh;margin:auto;background:#f8fcff;box-shadow:0 0 28px #0001}
+.header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #d7e5ef;padding:13px 16px}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#1268d9,#16a26f);display:grid;place-items:center;color:#fff;font-size:24px}
+.brand h1{margin:0;color:#174e8e;font-size:21px}.brand p{margin:2px 0 0;color:#667b8c;font-size:11px}
+.status{display:inline-flex;gap:5px;margin-top:8px;padding:5px 10px;border-radius:20px;background:#e7f8ef;color:#14704f;font-size:12px}
+main{padding:16px}.screen{display:none}.screen.active{display:block}h2{margin:5px 0;font-size:23px}.sub{color:#667b8c;font-size:14px;margin:0 0 14px}
+.card{background:#fff;border:1px solid #d5e4ef;border-radius:16px;padding:15px;margin-bottom:13px;box-shadow:0 3px 12px #164b8208}
+.hero{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#e8f5ff,#e9faf2);border:1px solid #cce4f4;border-radius:18px;padding:15px;margin-bottom:14px}.hero-icon{font-size:45px}.hero strong{color:#15559a}.hero p{margin:5px 0 0;font-size:13px;line-height:1.4;color:#526b7e}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}input,select,textarea{width:100%;border:1px solid #bdd3e5;border-radius:12px;padding:11px;background:#fff;color:#15324b;outline:0}textarea{min-height:100px;resize:vertical}
+.btn{width:100%;border:0;border-radius:12px;padding:12px;margin-top:9px;font-weight:bold}.primary{background:#1268d9;color:#fff}.secondary{background:#eaf4ff;color:#0757a7;border:1px solid #c7dff3}.green{background:#e6f8ef;color:#08724d;border:1px solid #c5ead8}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.menu{min-height:105px;border:1px solid #d4e4ef;border-radius:15px;background:#fff;padding:12px 8px;color:#174c80;font-weight:bold}.menu span{display:block;font-size:27px;margin-bottom:6px}.menu small{display:block;color:#6a7d8c;font-weight:normal;margin-top:4px}
+.back{border:0;background:0;color:#1268d9;font-weight:bold;padding:5px 0}.title-row{display:flex;justify-content:space-between;align-items:center;gap:8px}.badge{display:inline-block;padding:5px 9px;border-radius:15px;background:#e8f2ff;color:#0757a7;font-size:11px;margin:2px}
+.result{background:#eff9f5;border:1px solid #bfe6d5;border-radius:15px;padding:14px;margin-top:12px}.word{font-size:25px;font-weight:bold;color:#08714f;margin:5px 0}.muted{font-size:12px;color:#667b8c}.center{text-align:center}
+.mic{width:76px;height:76px;border-radius:50%;border:8px solid #dceeff;background:#1268d9;color:#fff;font-size:31px;margin:15px auto 7px;display:grid;place-items:center}.mic.listening{animation:pulse .8s infinite alternate}@keyframes pulse{to{transform:scale(1.07)}}
+.wave{height:40px;display:flex;align-items:center;justify-content:center;gap:4px}.wave i{width:4px;border-radius:5px;background:#1782e8}.wave i:nth-child(1){height:12px}.wave i:nth-child(2){height:24px}.wave i:nth-child(3){height:37px}.wave i:nth-child(4){height:18px}.wave i:nth-child(5){height:30px}.wave i:nth-child(6){height:15px}.wave i:nth-child(7){height:34px}.wave i:nth-child(8){height:20px}.wave i:nth-child(9){height:28px}.wave i:nth-child(10){height:12px}
+.file{border:2px dashed #acd1ee;border-radius:15px;padding:22px 12px;text-align:center;background:#f8fcff}.file .big{font-size:38px}.file-name{font-size:12px;color:#667b8c;margin-top:7px}
+.search{position:relative}.search input{padding-left:40px}.search span{position:absolute;left:14px;top:11px}.phrase{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #e3edf3}.phrase:last-child{border-bottom:0}.phrase strong{color:#08714f}.tiny{font-size:11px;color:#728596}
+.worksheet{background:#fff;border:1px solid #cbdde9;border-radius:13px;padding:16px;line-height:1.55}.worksheet h3{text-align:center;margin-top:0}.line{display:inline-block;width:105px;border-bottom:1px solid #777}.lesson{padding:12px;border:1px solid #d7e5ef;border-radius:12px;background:#fbfdff;margin-top:8px}
+
+.lesson-view{background:#fff;border:1px solid #cbdde9;border-radius:14px;padding:16px;margin-top:10px}
+.lesson-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.lesson-head h3{margin:0;color:#174e8e}
+.pill{display:inline-block;background:#e8f5ee;color:#16734b;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:bold}
+.bilingual{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.langbox{border:1px solid #d7e5ef;border-radius:12px;padding:11px;background:#fbfdff}
+.langbox b{display:block;font-size:11px;color:#687d8e;margin-bottom:5px}
+.bigword{font-size:22px;font-weight:bold;color:#174e8e}
+.flash{border:0;background:#eef6ff;border-radius:14px;padding:18px;text-align:center;min-height:110px}
+.flash .fw{font-size:25px;font-weight:bold;margin:8px 0}
+.lesson-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.lesson-list button{width:100%;text-align:left;border:1px solid #d7e5ef;background:#fff;border-radius:11px;padding:11px;margin-top:7px}.livebox{border:1px solid #c8ddeb;border-radius:16px;background:#fff;padding:14px;margin-top:12px}.live-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.live-msg{padding:11px;border-radius:13px;margin:8px 0;border:1px solid #d8e6ef}.live-msg.hi{background:#f5f9ff}.live-msg.local{background:#eff9f4}.live-msg small{display:block;color:#6c7e8d;margin-bottom:4px}.live-mic{width:82px;height:82px;border-radius:50%;border:7px solid #dceeff;background:#1268d9;color:#fff;font-size:31px;display:grid;place-items:center;margin:12px auto}.live-mic.listening{animation:pulse .8s infinite alternate}.live-status{text-align:center;font-size:12px;color:#667b8c}.history{max-height:280px;overflow:auto}
+.livebox{border:1px solid #c8ddeb;border-radius:16px;background:#fff;padding:14px;margin-top:12px}.live-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.live-msg{padding:11px;border-radius:13px;margin:8px 0;border:1px solid #d8e6ef}.live-msg.hi{background:#f5f9ff}.live-msg.local{background:#eff9f4}.live-msg small{display:block;color:#6c7e8d;margin-bottom:4px}.live-mic{width:82px;height:82px;border-radius:50%;border:7px solid #dceeff;background:#1268d9;color:#fff;font-size:31px;display:grid;place-items:center;margin:12px auto}.live-mic.listening{animation:pulse .8s infinite alternate}.live-status{text-align:center;font-size:12px;color:#667b8c}.history{max-height:280px;overflow:auto}
+.lesson-list button.active{border-color:#1268d9;background:#eef6ff}
+.nav{position:sticky;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #d5e4ef}.nav button{border:0;background:#fff;color:#687d8e;font-size:11px;padding:8px 2px}.nav button.active{color:#1268d9;font-weight:bold}.nav span{display:block;font-size:20px}
+.toast{position:fixed;z-index:99;left:50%;bottom:75px;transform:translateX(-50%);background:#15324b;color:#fff;padding:10px 15px;border-radius:20px;font-size:13px;display:none;max-width:90%;text-align:center}
+.footer-note{font-size:10px;color:#7a8b98;line-height:1.4;margin-top:15px}
+@media(min-width:700px){.app{margin:20px auto;min-height:calc(100vh - 40px);border-radius:22px;overflow:hidden}}
+
+.smartbox{margin-top:12px;border:1px solid #cfe0ec;border-radius:14px;padding:14px;background:#f7fbff}
+.conf{display:inline-block;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:bold;background:#e9f5ee;color:#16734b}
+.missing{color:#a15a00;font-size:12px;margin-top:8px}
+.livebar{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;color:#687d8e;margin-top:8px}
+.online-dot{font-weight:bold}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.stat{background:#f2f7fb;border-radius:12px;padding:10px;text-align:center}.stat b{display:block;font-size:19px;color:#174e8e}.stat span{font-size:10px;color:#687d8e}
+.visual-preview{width:100%;min-height:190px;border:2px dashed #b9cfdf;border-radius:18px;display:grid;place-items:center;background:#f5faff;overflow:hidden;margin:10px 0}.visual-preview img{max-width:100%;max-height:260px;display:block}.visual-placeholder{font-size:64px}.visual-card{background:#fff;border:1px solid #d7e5ef;border-radius:18px;padding:16px;text-align:center}.visual-word{font-size:28px;font-weight:800;margin:6px}.mini-note{font-size:12px;color:#6b7f90;line-height:1.45}</style>
+<link rel="manifest" href="manifest.json"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"></head>
+<body>
+<div class="app">
+<header class="header">
+ <div class="brand"><div class="logo">🌿</div><div><h1>BharathBridge AI</h1><p>Mother Tongue Learning Assistant</p></div></div>
+ <div class="status">🟢 Local Phrasebook <span id="count"></span></div><div class="livebar"><span id="networkStatus" class="online-dot">Checking connection…</span><button class="back" onclick="installApp()">📲 Install App</button></div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+ <h2>Welcome Teacher 👋</h2><p class="sub">Bridge language gaps and teach in the child's mother tongue.</p>
+ <div class="hero"><div class="hero-icon">👩‍🏫</div><div><strong>Local Languages. Brighter Futures.</strong><p>Translate lesson phrases, speak with students and create bilingual learning materials.</p></div></div>
+ <div class="card"><label>Choose Target Language</label><select id="language" onchange="setLanguage(this.value)"><option>Ho</option><option>Mundari</option><option>Santhali</option></select></div>
+ <div class="grid">
+  <button class="menu" onclick="show('phrasebook')"><span>📚</span>Phrasebook<small>Reviewed language data</small></button>
+  <button class="menu" onclick="show('translation')"><span>🔍</span>Translation<small>Hindi → target</small></button>
+  <button class="menu" onclick="show('voice')"><span>🎤</span>Voice Translator<small>Speech → text → phrase</small></button>
+  <button class="menu" onclick="show('live')"><span>🗣️</span>Live Classroom<small>Two-way conversation mode</small></button>
+  <button class="menu" onclick="show('worksheet')"><span>📝</span>Create Worksheet<small>Bilingual activity</small></button>
+  <button class="menu" onclick="show('visual')"><span>📷</span>Visual Learning<small>Photo → bilingual flashcard</small></button>
+ </div>
+ <div class="title-row" style="margin-top:18px"><strong>Lesson Content</strong><span class="badge">FLN demo</span></div>
+ <div class="card">
+  <div class="lesson">🌱 <b>Plants Around Us</b><br><span class="tiny">Identify and name common plants.</span><button class="back" onclick="loadLesson('Plants Around Us')">Open →</button></div>
+  <div class="lesson">🔢 <b>Numbers 1–10</b><br><span class="tiny">Recognize and count numbers.</span><button class="back" onclick="loadLesson('Numbers 1–10')">Open →</button></div>
+  <div class="lesson">🏠 <b>Our Environment</b><br><span class="tiny">Identify familiar objects and places.</span><button class="back" onclick="loadLesson('Our Environment')">Open →</button></div>
+ </div>
+ 
+<div class="card" style="margin-top:14px">
+ <b>📊 Teacher Activity</b>
+ <div class="statgrid">
+  <div class="stat"><b id="statTranslations">0</b><span>Translations</span></div>
+  <div class="stat"><b id="statVoice">0</b><span>Voice uses</span></div>
+  <div class="stat"><b id="statWorksheets">0</b><span>Worksheets</span></div>
+ </div>
+</div>
+<div class="footer-note">Prototype note: Ho vocabulary shown here is sourced from public dictionary resources and should be reviewed by a Ho-speaking teacher/community expert before classroom deployment.</div>
+</section>
+
+<section id="lessons" class="screen">
+ <button class="back" onclick="show('home')">← Back</button>
+ <h2>📖 Lesson Content</h2><p class="sub">Bilingual lesson support for primary classroom teaching.</p>
+ <div class="card lesson-list">
+  <label>Select Lesson</label>
+  <button id="lessonBtnPlants" onclick="loadLesson('Plants Around Us')">🌱 <b>Plants Around Us</b><br><span class="tiny">Identify and name common plants.</span></button>
+  <button id="lessonBtnNumbers" onclick="loadLesson('Numbers 1–10')">🔢 <b>Numbers 1–10</b><br><span class="tiny">Recognize and count numbers.</span></button>
+  <button id="lessonBtnEnvironment" onclick="loadLesson('Our Environment')">🏠 <b>Our Environment</b><br><span class="tiny">Identify familiar objects and places.</span></button>
+ </div>
+ <div id="lessonView" class="lesson-view"></div>
+</section>
+
+<section id="phrasebook" class="screen">
+ <button class="back" onclick="show('home')">← Back</button><h2>📚 Phrasebook</h2><p class="sub">Search the local offline phrasebook or import your reviewed CSV.</p>
+ <div class="card">
+  <div class="search"><span>🔎</span><input id="phraseSearch" placeholder="Search Hindi or Ho..." oninput="renderPhrases()"></div>
+  <div id="phraseList" style="margin-top:8px"></div>
+ </div>
+ <div class="card">
+  <div class="file"><div class="big">📄</div><b>Import reviewed CSV</b><p class="tiny">Format: hindi,target</p><input type="file" accept=".csv,text/csv" onchange="importCSV(event)"><div id="fileName" class="file-name">No file chosen</div></div>
+  <button class="btn secondary" onclick="downloadCSV()">⬇ Download current phrasebook</button>
+ </div>
+</section>
+
+<section id="translation" class="screen">
+ <button class="back" onclick="show('home')">← Back</button><h2>🔍 Find a Translation</h2><p class="sub">Hindi → <span class="target">Ho</span></p>
+ <div class="card">
+  <label>Hindi word or sentence</label><textarea id="input" placeholder="Example: पानी"></textarea>
+  <button class="btn primary" onclick="translate()">🔎 Translate</button>
+  <button class="mic" id="mic1" onclick="speech('translation')">🎤</button>
+  <div class="center muted">Speak Hindi or type a phrase</div>
+  <div id="trResult" class="result" style="display:none">
+   <span class="muted">Reviewed phrasebook result</span><div id="trWord" class="word"></div><div id="trHindi" class="muted"></div>
+   <button class="btn green" onclick="speak('trWord')">🔊 Listen</button>
+  </div>
+ </div>
+
+<div class="smartbox">
+ <b>🧠 Smart Sentence Translation</b>
+ <p class="tiny">Uses your reviewed phrasebook word-by-word when an exact sentence is not available. It does not invent translations.</p>
+ <div id="smartResult" style="display:none">
+  <p><b>Result:</b> <span id="smartText"></span></p>
+  <span id="smartConfidence" class="conf"></span>
+  <div id="smartMissing" class="missing"></div>
+ </div>
+</div>
+</section>
+<section id="voice" class="screen">
+ <button class="back" onclick="show('home')">← Back</button><h2>🎤 Voice Translator</h2><p class="sub">Teacher: Hindi → Student: <span class="target">Ho</span></p>
+ <div class="card center">
+  <div class="grid"><div class="lesson"><b>Teacher</b><br>🇮🇳 Hindi</div><div class="lesson"><b>Student</b><br>🌿 <span class="target">Ho</span></div></div>
+  <button class="mic" id="mic2" onclick="speech('voice')">🎤</button><b>Tap to speak</b>
+  <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div id="voiceStatus" class="muted">Ready</div>
+  <div id="voiceResult" class="result" style="display:none;text-align:left"><span class="muted">Hindi detected</span><div id="voiceHindi" style="font-weight:bold;margin:5px 0"></div><hr><span class="muted">Ho translation</span><div id="voiceWord" class="word"></div><button class="btn green" onclick="speak('voiceWord')">🔊 Play</button></div>
+ </div>
+ <div class="card"><span class="badge">Offline phrase lookup</span><span class="badge">Voice prototype</span><p class="muted">Speech recognition availability depends on the browser/device. The local phrasebook does not require internet after the page is cached.</p></div>
+</section>
+
+<section id="live" class="screen">
+  <button class="back" onclick="show("home")">← Back</button>
+  <h2>🗣️ Live Classroom Translator</h2>
+  <p class="sub">Hindi speech → reviewed phrasebook → <span class="target">Ho</span> text + available audio</p>
+  <div class="card center">
+    <div class="badge">Prototype real-time mode</div>
+    <button class="live-mic" id="liveMic" onclick="startLive()">🎤</button>
+    <div id="liveStatus" class="live-status">Tap the microphone and speak Hindi.</div>
+    <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="livebox">
+    <div class="title-row"><b>Conversation</b><button class="btn secondary" style="width:auto;margin:0;padding:8px 10px" onclick="clearLive()">Clear</button></div>
+    <div id="liveHistory" class="history"><p class="muted center">Your translated conversation will appear here.</p></div>
+  </div>
+  <div class="card">
+    <b>⚡ Low-bandwidth design</b>
+    <p class="muted">Translation uses the local phrasebook first, so reviewed words can work without a translation server. Browser speech recognition may still require network access.</p>
+    <div class="live-row"><button class="btn green" onclick="speakLastLive()">🔊 Repeat last</button><button class="btn secondary" onclick="show('translation')">✏️ Correct in Translate</button></div>
+  </div>
+  <div class="footer-note">For classroom deployment, add teacher/community-reviewed sentence pairs and validate target-language pronunciation before relying on the tool for instruction.</div>
+</section>
+
+<section id="visual" class="screen">
+ <button class="back" onclick="show('home')">← Back</button>
+ <h2>📷 Visual Learning Lab</h2><p class="sub">Use a classroom photo to make a bilingual learning card.</p>
+ <div class="card">
+  <label>Take or choose a photo</label>
+  <input id="visualFile" type="file" accept="image/*" capture="environment" onchange="previewVisual(event)">
+  <div id="visualPreview" class="visual-preview"><div><div class="visual-placeholder">📷</div><div class="mini-note">Photo stays in this browser session.</div></div></div>
+  <label>Hindi object/word</label><input id="visualHindi" placeholder="Example: पेड़" oninput="updateVisualTranslation()">
+  <div class="card" style="margin-top:10px;padding:12px;background:#f6fbff"><div class="mini-note">Reviewed phrasebook match</div><div id="visualTarget" class="visual-word">—</div><div id="visualMatch" class="mini-note">Type a Hindi word to check the local phrasebook.</div></div>
+  <label style="margin-top:12px">If reviewed translation is missing</label><input id="visualCustomTarget" placeholder="Enter teacher-reviewed target word">
+  <button class="btn primary" onclick="createVisualCard()">🎴 Create Bilingual Flashcard</button>
+ </div>
+ <div id="visualCard" class="visual-card" style="display:none"><div class="mini-note">BHARATHBRIDGE AI • VISUAL FLASHCARD</div><div id="cardImage"></div><div class="mini-note">HINDI</div><div id="cardHindi" class="visual-word"></div><div class="mini-note" id="cardLang"></div><div id="cardTarget" class="visual-word"></div><button class="btn green" onclick="speakText(document.getElementById('cardTarget').textContent)">🔊 Listen</button><button class="btn secondary" onclick="printVisualCard()">🖨 Print Card</button></div>
+ <div class="card"><b>🧑‍🏫 Teacher review</b><p class="mini-note">This prototype does not automatically identify objects from the photo. The teacher confirms the Hindi label and translation before classroom use.</p></div>
+</section>
+
+<section id="worksheet" class="screen">
+ <button class="back" onclick="show('home')">← Back</button><h2>📝 Create Worksheet</h2><p class="sub">Generate a simple bilingual classroom activity.</p>
+ <div class="card">
+  <label>Lesson</label><select id="lesson"><option>Plants Around Us</option><option>Numbers 1–10</option><option>Our Environment</option></select>
+  <label style="margin-top:12px">Learning Outcome</label><input id="outcome" value="Identify and name common plants">
+  <button class="btn primary" onclick="makeWorksheet()">✨ Generate</button>
+ </div>
+ <div id="sheet" class="worksheet"><h3>WORKSHEET</h3><p><b>Plants Around Us</b></p><p><b>Learning Outcome:</b> Identify and name common plants.</p><hr><p><b>1. Identify the pictures.</b></p><p style="font-size:28px">🌳 🌸 🍃 🌻</p><p><b>2. Fill in the blanks.</b></p><p>a) A tree has <span class="line"></span>.</p><p>b) A flower is <span class="line"></span>.</p><p><b>3. Oral question:</b> Name one plant near your home.</p></div>
+ <button class="btn secondary" onclick="printSheet()">🖨 Print / Save as PDF</button>
+</section>
+</main>
+
+<nav class="nav"><button id="nHome" class="active" onclick="show('home')"><span>🏠</span>Home</button><button id="nTranslation" onclick="show('translation')"><span>🔍</span>Translate</button><button id="nVoice" onclick="show('voice')"><span>🎤</span>Voice</button><button id="nVisual" onclick="show('visual')"><span>📷</span>Visual</button><button id="nWorksheet" onclick="show('worksheet')"><span>📝</span>Worksheet</button></nav>
+<div id="toast" class="toast"></div>
+</div>
+
+<script>
+const HO=[
+["नमस्ते","johar"],["धन्यवाद","dhanybad"],["पानी","daa"],["आग","sengel"],["सूरज","singi"],["चाँद","chando"],["तारा","ipil"],["रात","nida"],["बारिश","gama"],["हवा","hoyo"],["मिट्टी","hasa"],["पत्थर","diri"],["पहाड़","buru"],["माता","ayu"],["पिता","apu"],["मैं","aiñ"],["तुम","am"],["नाम","nutum"],["सिर","boʼ"],["आँख","med"],["कान","lutur"],["दाँत","data"],["हाथ","ti"],["पैर","kata"],["दिल","jiu"],["खून","mayom"],["पेड़","daru"],["कुत्ता","seta"],["बिल्ली","pusi"],["मछली","haku"],["पक्षी","oe"],["अंडा","jarom"],["घोड़ा","sadom"],["घर","oraa"],["दूध","toa"],["नमक","bulung"],["चावल","chauli"],["किताब","kitab"],["खाना","jom"],["पीना","nu"],["सोना","durum"],["एक","miyad"],["दो","bariya"],["तीन","apiya"],["अच्छा","bugin"],["नया","nama"],["लाल","arag"],["सफ़ेद","pundi"],["काला","hende"]
+].map(x=>({hindi:x[0],target:x[1]}));
+
+let lang=localStorage.getItem("bbLang")||"Ho";
+let data=JSON.parse(localStorage.getItem("bbPhrasebook")||"null")||HO;
+let last={};
+
+
+function bumpStat(k){
+ const key="bbStats"; const s=JSON.parse(localStorage.getItem(key)||"{}"); s[k]=(s[k]||0)+1; localStorage.setItem(key,JSON.stringify(s)); updateStats();
+}
+function updateStats(){
+ const s=JSON.parse(localStorage.getItem("bbStats")||"{}");
+ const a={translations:"statTranslations",voice:"statVoice",worksheets:"statWorksheets"};
+ Object.keys(a).forEach(k=>{const el=document.getElementById(a[k]);if(el)el.textContent=s[k]||0});
+}
+function updateNetwork(){
+ const el=document.getElementById("networkStatus");
+ if(el) el.textContent=navigator.onLine?"🟢 Online — app data stays on this device":"🟠 Offline — local phrasebook available";
+}
+let deferredInstall=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e});
+async function installApp(){
+ if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null}
+ else showToast("Use your browser menu → Add to Home screen");
+}
+function init(){document.getElementById("language").value=lang;updateLabels();renderPhrases();document.getElementById("count").textContent=" ("+data.length+" phrases)";loadLesson("Plants Around Us");show("home");updateStats();updateNetwork();window.addEventListener("online",updateNetwork);window.addEventListener("offline",updateNetwork);if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});}
+function setLanguage(v){lang=v;localStorage.setItem("bbLang",v);updateLabels();showToast("Target language: "+v);if(v!=="Ho")showToast("Import a reviewed "+v+" CSV to enable its translations.");}
+function updateLabels(){document.querySelectorAll(".target").forEach(x=>x.textContent=lang);}
+function show(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ const map={home:"nHome",translation:"nTranslation",voice:"nVoice",visual:"nVisual",worksheet:"nWorksheet"};if(map[id])document.getElementById(map[id]).classList.add("active");
+ scrollTo({top:0,behavior:"smooth"});renderPhrases();
+}
+function norm(s){return s.trim().replace(/\s+/g," ").toLowerCase();}
+function find(text){return data.find(x=>norm(x.hindi)===norm(text));}
+function smartTranslateText(text){
+ const exact=find(text);
+ if(exact) return {text:exact.target,confidence:"Exact reviewed phrase",missing:[]};
+ const tokens=text.match(/[\u0900-\u097F]+|[^\u0900-\u097F]+/g)||[text];
+ const missing=[],out=tokens.map(tok=>{
+   if(!/[\u0900-\u097F]/.test(tok)) return tok;
+   const m=find(tok);
+   if(m) return m.target;
+   missing.push(tok); return "▢";
+ }).join("");
+ const known=tokens.filter(x=>/[\u0900-\u097F]/.test(x)).length-missing.length;
+ const total=tokens.filter(x=>/[\u0900-\u097F]/.test(x)).length;
+ return {text:out,confidence:total?Math.round(known/total*100)+"% word coverage":"No reviewed words",missing:[...new Set(missing)]};
+}
+function translate(){
+ const text=document.getElementById("input").value.trim();if(!text)return showToast("Enter Hindi text");
+ const m=find(text);last=m?m.target:"";document.getElementById("trWord").textContent=m?m.target:"No reviewed translation found";document.getElementById("trHindi").textContent="Hindi: "+text;document.getElementById("trResult").style.display="block";
+ const s=smartTranslateText(text);
+ document.getElementById("smartText").textContent=s.text;
+ document.getElementById("smartConfidence").textContent=s.confidence;
+ document.getElementById("smartMissing").textContent=s.missing.length?"Needs review for: "+s.missing.join(", "):"All words matched in the local phrasebook.";
+ document.getElementById("smartResult").style.display="block";
+ bumpStat("translations");
+}
+
+function speech(mode){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return showToast("Speech recognition is not supported in this browser");
+ const r=new SR();r.lang="hi-IN";r.interimResults=false;r.maxAlternatives=1;
+ const mic=document.getElementById(mode==="voice"?"mic2":"mic1");mic.classList.add("listening");if(mode==="voice")document.getElementById("voiceStatus").textContent="Listening…";
+ r.onresult=e=>{
+  const text=e.results[0][0].transcript,s=smartTranslateText(text);
+  if(mode==="translation"){document.getElementById("input").value=text;translate();}
+  else{
+   document.getElementById("voiceHindi").textContent=text;
+   document.getElementById("voiceWord").textContent=s.text;
+   document.getElementById("voiceResult").style.display="block";
+   document.getElementById("voiceStatus").textContent="Translation ready";
+   bumpStat("voice");
+   if(s.missing.length) showToast("Some words need reviewed translation");
+  }
+ };
+ r.onerror=()=>showToast("Speech recognition failed");r.onend=()=>{mic.classList.remove("listening");if(mode==="voice")document.getElementById("voiceStatus").textContent="Ready"};r.start();
+}
+
+function speak(id){const t=document.getElementById(id).textContent;if(!t||t.includes("No reviewed"))return;if(!speechSynthesis)return showToast("Speech synthesis unavailable");speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="hi-IN";speechSynthesis.speak(u);}
+function renderPhrases(){
+ const q=norm(document.getElementById("phraseSearch")?.value||"");const list=document.getElementById("phraseList");if(!list)return;
+ const rows=data.filter(x=>!q||norm(x.hindi).includes(q)||norm(x.target).includes(q)).slice(0,50);
+ list.innerHTML=rows.map(x=>`<div class="phrase"><span>🇮🇳 ${esc(x.hindi)}</span><strong>🌿 ${esc(x.target)}</strong></div>`).join("")||'<p class="muted">No matching phrase.</p>';
+ document.getElementById("count").textContent=" ("+data.length+" phrases)";
+}
+function importCSV(e){
+ const f=e.target.files[0];if(!f)return;document.getElementById("fileName").textContent=f.name;const rd=new FileReader();
+ rd.onload=()=>{const rows=parseCSV(rd.result);if(rows.length<2)return showToast("Invalid CSV");const h=rows[0].map(x=>x.trim().toLowerCase()),hi=h.indexOf("hindi"),ti=h.indexOf(lang.toLowerCase())>=0?h.indexOf(lang.toLowerCase()):1;if(hi<0)return showToast("CSV needs a hindi column");const out=[];for(let i=1;i<rows.length;i++){if(rows[i].length>Math.max(hi,ti)&&rows[i][hi].trim()&&rows[i][ti].trim())out.push({hindi:rows[i][hi].trim(),target:rows[i][ti].trim()});}data=out;localStorage.setItem("bbPhrasebook",JSON.stringify(data));renderPhrases();showToast(out.length+" reviewed phrases imported");};rd.readAsText(f,"UTF-8");
+}
+function parseCSV(t){let a=[],r=[],c="",q=false;for(let i=0;i<t.length;i++){let x=t[i],n=t[i+1];if(x=='"'&&q&&n=='"'){c+='"';i++;}else if(x=='"')q=!q;else if(x==","&&!q){r.push(c);c="";}else if((x=="\n"||x=="\r")&&!q){if(x=="\r"&&n=="\n")i++;r.push(c);if(r.some(v=>v.trim()))a.push(r);r=[];c="";}else c+=x;}r.push(c);if(r.some(v=>v.trim()))a.push(r);return a;}
+function downloadCSV(){const csv="hindi,"+lang+"\n"+data.map(x=>`"${x.hindi.replaceAll('"','""')}","${x.target.replaceAll('"','""')}"`).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="bharathbridge_"+lang+"_phrasebook.csv";a.click();}
+const LESSONS={
+ "Plants Around Us":{
+  icon:"🌱",outcome:"Identify and name common plants.",
+  hindi:["पेड़","फूल","पत्ता","पौधा"],examples:[["पेड़","daru"],["फूल","फूल"],["पत्ता","पत्ता"],["पौधा","पौधा"]],
+  activity:"Look around the school/home and name two plants."
+ },
+ "Numbers 1–10":{
+  icon:"🔢",outcome:"Recognize and count numbers from 1 to 10.",
+  hindi:["एक","दो","तीन","चार","पाँच","छह","सात","आठ","नौ","दस"],examples:[["एक","miyad"],["दो","bariya"],["तीन","apiya"]],
+  activity:"Count 5 classroom objects aloud."
+ },
+ "Our Environment":{
+  icon:"🏠",outcome:"Identify familiar objects and places.",
+  hindi:["घर","मिट्टी","पत्थर","पहाड़","पानी"],examples:[["घर","oraa"],["मिट्टी","hasa"],["पत्थर","diri"],["पहाड़","buru"],["पानी","daa"]],
+  activity:"Point to one object near you and say its name."
+ }
+};
+function lessonTarget(hindi){
+ const m=data.find(x=>norm(x.hindi)===norm(hindi));
+ return m?m.target:"—";
+}
+function loadLesson(t){
+ show("lessons");
+ document.querySelectorAll(".lesson-list button").forEach(b=>b.classList.remove("active"));
+ const id=t==="Plants Around Us"?"lessonBtnPlants":t==="Numbers 1–10"?"lessonBtnNumbers":"lessonBtnEnvironment";
+ document.getElementById(id)?.classList.add("active");
+ const L=LESSONS[t];
+ const words=L.hindi.map(h=>{const target=lessonTarget(h);return `<div class="bilingual"><div class="langbox"><b>HINDI</b><span class="bigword">${esc(h)}</span></div><div class="langbox"><b>${esc(lang.toUpperCase())}</b><span class="bigword">${esc(target)}</span></div></div>`}).join("");
+ const cards=L.examples.map(([h,fallback])=>{const target=lessonTarget(h);return `<div class="flash"><div class="muted">Hindi</div><div class="fw">${esc(h)}</div><div class="muted">↓</div><div class="fw">${esc(target!=="—"?target:fallback)}</div><button class="btn green" onclick="speakText('${escapeAttr(target!=="—"?target:fallback)}')">🔊 Listen</button></div>`}).join("");
+ document.getElementById("lessonView").innerHTML=
+ `<div class="lesson-head"><h3>${L.icon} ${esc(t)}</h3><span class="pill">FLN</span></div>
+ <p class="muted"><b>Learning outcome:</b> ${esc(L.outcome)}</p>
+ <div class="card" style="padding:10px;margin-top:10px"><b>Key words</b>${words}</div>
+ <h3 style="margin:16px 0 8px">🎴 Bilingual Flashcards</h3>
+ <div class="grid">${cards}</div>
+ <div class="card" style="margin-top:12px"><b>👩‍🏫 Classroom activity</b><p>${esc(L.activity)}</p></div>
+ <div class="lesson-actions"><button class="btn primary" onclick="sendLessonToWorksheet('${escapeAttr(t)}')">📝 Create Worksheet</button><button class="btn secondary" onclick="downloadLesson('${escapeAttr(t)}')">⬇ Download Lesson</button></div>
+ <div class="footer-note">Language note: ${esc(lang)} words come from the currently loaded local phrasebook. Review translations with a teacher/community language expert before classroom use.</div>`;
+}
+function speakText(t){
+ if(!t||t==="—")return;
+ if(!("speechSynthesis" in window))return showToast("Speech synthesis unavailable");
+ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t);
+ const voices=speechSynthesis.getVoices();
+ const targetHints=lang==="Santhali"?["sat","santali"]:lang==="Mundari"?["unx","mundari"]:["hoc","ho"];
+ const v=voices.find(x=>targetHints.some(h=>(x.lang||"").toLowerCase().includes(h)) || targetHints.some(h=>(x.name||"").toLowerCase().includes(h)));
+ u.voice=v||voices.find(x=>(x.lang||"").toLowerCase().startsWith("hi"))||null;
+ u.lang=v?v.lang:"hi-IN";
+ speechSynthesis.speak(u);
+ showToast(v?"Playing in available target voice":"Target-language voice not installed; using browser fallback");
+}
+
+function sendLessonToWorksheet(t){
+ show("worksheet");document.getElementById("lesson").value=t;
+ document.getElementById("outcome").value=LESSONS[t].outcome;makeWorksheet();
+}
+function downloadLesson(t){
+ const L=LESSONS[t];let lines=["BharathBridge AI – Lesson Content",t,"Target language: "+lang,"","Learning outcome: "+L.outcome,"","Key words:"];
+ L.hindi.forEach(h=>lines.push(h+" = "+lessonTarget(h)));
+ lines.push("","Classroom activity: "+L.activity);
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([lines.join("\n")],{type:"text/plain;charset=utf-8"}));a.download="bharathbridge_"+t.replace(/[^a-z0-9]+/gi,"_")+".txt";a.click();showToast("Lesson downloaded");
+}
+function escapeAttr(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;");}
+let liveRecognition=null;
+let liveLast=null;
+function addLiveMessage(hindi,target,coverage){
+ const box=document.getElementById("liveHistory");
+ if(box.querySelector(".muted.center")) box.innerHTML="";
+ const row=document.createElement("div"); row.className="live-msg hi";
+ row.innerHTML=`<small>Hindi</small><b>${esc(hindi)}</b>`; box.appendChild(row);
+ const row2=document.createElement("div"); row2.className="live-msg local";
+ row2.innerHTML=`<small>${esc(lang)} · ${esc(coverage)}</small><b>${esc(target)}</b><br><button class="btn green" style="width:auto;padding:7px 10px" onclick="speakText(${JSON.stringify(target)})">🔊 Listen</button>`; box.appendChild(row2);
+ box.scrollTop=box.scrollHeight; liveLast={hindi,target};
+}
+function startLive(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR)return showToast("Live speech recognition is not supported in this browser");
+ if(liveRecognition){try{liveRecognition.stop()}catch(e){} liveRecognition=null; return;}
+ const r=new SR(); liveRecognition=r; r.lang="hi-IN"; r.interimResults=false; r.continuous=false; r.maxAlternatives=1;
+ const mic=document.getElementById("liveMic"); mic.classList.add("listening"); document.getElementById("liveStatus").textContent="Listening… speak now";
+ r.onresult=e=>{ const text=e.results[0][0].transcript; const out=smartTranslateText(text); addLiveMessage(text,out.text,out.confidence); bumpStat("voice"); if(out.missing.length) showToast("Needs review: "+out.missing.join(", ")); else showToast("Translation ready"); };
+ r.onerror=()=>{document.getElementById("liveStatus").textContent="Speech recognition error";showToast("Try the microphone again");};
+ r.onend=()=>{mic.classList.remove("listening");document.getElementById("liveStatus").textContent="Tap again to speak the next sentence.";liveRecognition=null;};
+ try{r.start()}catch(e){showToast("Microphone could not start");liveRecognition=null;mic.classList.remove("listening");}
+}
+function clearLive(){document.getElementById("liveHistory").innerHTML='<p class="muted center">Your translated conversation will appear here.</p>';liveLast=null;}
+function speakLastLive(){if(!liveLast)return showToast("No translation yet");speakText(liveLast.target);}
+
+let visualDataUrl="";
+function previewVisual(e){const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith("image/"))return showToast("Please choose an image");const r=new FileReader();r.onload=()=>{visualDataUrl=r.result;document.getElementById("visualPreview").innerHTML=`<img src="${r.result}" alt="Classroom visual">`;};r.readAsDataURL(f);}
+function updateVisualTranslation(){const h=document.getElementById("visualHindi").value.trim(),m=find(h);document.getElementById("visualTarget").textContent=m?m.target:"—";document.getElementById("visualMatch").textContent=m?"Exact phrasebook match.":"No reviewed match. Enter a teacher-reviewed target word below.";}
+function createVisualCard(){const h=document.getElementById("visualHindi").value.trim();if(!h)return showToast("Enter the Hindi object/word");const m=find(h),custom=document.getElementById("visualCustomTarget").value.trim(),target=m?m.target:custom;if(!target)return showToast("Add a reviewed translation before creating the card");if(custom&&!m){data.push({hindi:h,target:custom});localStorage.setItem("bbPhrasebook",JSON.stringify(data));renderPhrases();}document.getElementById("cardImage").innerHTML=visualDataUrl?`<img src="${visualDataUrl}" alt="${esc(h)}" style="max-width:100%;max-height:220px;border-radius:14px">`:`<div class="visual-placeholder">🖼️</div>`;document.getElementById("cardHindi").textContent=h;document.getElementById("cardLang").textContent=lang.toUpperCase();document.getElementById("cardTarget").textContent=target;document.getElementById("visualCard").style.display="block";showToast("Bilingual flashcard created");}
+function printVisualCard(){const c=document.getElementById("visualCard").innerHTML,w=open("","_blank");if(!w)return showToast("Allow pop-ups to print");w.document.write("<html><body style='font-family:Arial;padding:30px;text-align:center'>"+c+"</body></html>");w.document.close();w.print();}
+
+function makeWorksheet(){bumpStat("worksheets");const t=document.getElementById("lesson").value,o=document.getElementById("outcome").value;let q=t.includes("Plants")?`<p><b>1. Identify the pictures.</b></p><p style="font-size:28px">🌳 🌸 🍃 🌻</p><p><b>2. Fill in the blanks.</b></p><p>a) A tree has <span class="line"></span>.</p><p>b) A flower is <span class="line"></span>.</p>`:t.includes("Numbers")?`<p><b>1. Count.</b></p><p>🍎 🍎 🍎 = ______</p><p>⭐ ⭐ ⭐ ⭐ ⭐ = ______</p><p><b>2. Write the numbers 1–10.</b></p><p>________________________</p>`:`<p><b>1. Identify.</b></p><p style="font-size:28px">🏠 🌳 💧 ☀️</p><p><b>2. Fill in the blanks.</b></p><p>a) We live in a <span class="line"></span>.</p>`;document.getElementById("sheet").innerHTML=`<h3>WORKSHEET</h3><p><b>${esc(t)}</b></p><span class="badge">Hindi + ${esc(lang)}</span><p><b>Learning Outcome:</b> ${esc(o)}</p><hr>${q}<p><b>Oral question:</b> Explain one thing you learned in your mother tongue.</p>`;showToast("Worksheet generated");}
+function printSheet(){const w=open("","_blank");if(!w)return showToast("Allow pop-ups to print");w.document.write("<html><body style='font-family:Arial;padding:30px'>"+document.getElementById("sheet").innerHTML+"</body></html>");w.document.close();w.print();}
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function showToast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>t.style.display="none",2500)}
+init();
+</script>
+</body>
+</html>
